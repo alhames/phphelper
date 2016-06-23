@@ -1,0 +1,33 @@
+{
+  "name": "alhames/phphelper",
+  "type": "library",
+  "description": "PHP Helpers",
+  "homepage": "https://github.com/alhames/phphelper",
+  "license": "MIT",
+  "require": {
+    "php": "^5.5"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
+  "authors": [
+    {
+      "name": "Alhames",
+      "email": "alhames@mail.ru",
+      "homepage": "http://alhames.ru/"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/alhames/phphelper/issues"
+  },
+  "autoload": {
+    "psr-4": {
+      "PhpHelper\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PhpHelper\\Tests\\": "tests/"
+    }
+  }
+}
