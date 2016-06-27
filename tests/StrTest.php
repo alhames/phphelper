@@ -64,4 +64,120 @@ class StrTest extends \PHPUnit_Framework_TestCase
             [0x3576, '㕶'],
         ]);
     }
+
+    public function testFilter()
+    {
+        // todo
+    }
+
+    /**
+     * @dataProvider slugProvider
+     *
+     * @param string $string
+     * @param string $slug
+     * @param string $characters
+     */
+    public function testGetSlug($string, $slug, $characters = '')
+    {
+        $this->assertEquals($slug, Str::getSlug($string, $characters));
+    }
+
+    /**
+     * @return array
+     */
+    public function slugProvider()
+    {
+        return [
+            ['абв', 'abv'],
+            ['длинное название чего-либо', 'dlinnoe_nazvanie_chego_libo'],
+            ['fileName.txt', 'filename_txt'],
+            ['fileName.txt', 'filename.txt', '.'],
+            ['Заглавная буква в Начале слова и Предложения', 'zaglavnaya_bukva_v_nachale_slova_i_predlozheniya'],
+            ['counter-strike', 'counter_strike'],
+            ['counter-strike', 'counter-strike', '-'],
+            ['@#df$%щф&^жуpor', 'df_schf_zhupor'],
+        ];
+    }
+
+    public function testGetRandomString()
+    {
+        // todo
+    }
+
+    public function testIsUrl()
+    {
+        // todo
+    }
+
+    public function testIsMail()
+    {
+        // todo
+    }
+
+    public function testIsHash()
+    {
+        // todo
+    }
+
+    public function testPack()
+    {
+        // todo
+    }
+
+    public function testUnpack()
+    {
+        // todo
+    }
+
+    public function testPad()
+    {
+        // todo
+    }
+
+    public function testToCamelCase()
+    {
+        // todo
+    }
+
+    /**
+     * @dataProvider underscoreProvider
+     *
+     * @param string $from
+     * @param string $to
+     */
+    public function testToUnderscore($from, $to)
+    {
+        $this->assertEquals($to, Str::toUnderscore($from));
+    }
+
+    /**
+     * @return array
+     */
+    public function underscoreProvider()
+    {
+        return [
+            ['simpleTest', 'simple_test'],
+            ['easy', 'easy'],
+            ['HTML', 'html'],
+            ['simpleXML', 'simple_xml'],
+            ['PDFLoad', 'pdf_load'],
+            ['startMIDDLELast', 'start_middle_last'],
+            ['AString', 'a_string'],
+            ['Some4Numbers234', 'some4_numbers234'],
+            ['TEST123String', 'test123_string'],
+            ['TEST123string', 'test123string'],
+            ['hello__world', 'hello__world'],
+            ['hello_world', 'hello_world'],
+            ['_hello_world_', '_hello_world_'],
+            ['hello_World', 'hello_world'],
+            ['HelloWorld', 'hello_world'],
+            ['hello-world', 'hello-world'],
+            ['myHTMLFiLe', 'my_html_fi_le'],
+            ['aBaBaB', 'a_ba_ba_b'],
+            ['r_id', 'r_id'],
+            ['hello_aBigWorld', 'hello_a_big_world'],
+            ['hello_BigWorld', 'hello_big_world'],
+            ['libC', 'lib_c'],
+        ];
+    }
 }
