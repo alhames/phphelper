@@ -17,7 +17,7 @@ class Str
     protected static $filterCodeMask = "[%%%'04X]";
 
     /** @var array */
-    protected static $transliteration = [
+    protected static $slugTransliteration = [
         'а' => 'a',
         'б' => 'b',
         'в' => 'v',
@@ -44,7 +44,7 @@ class Str
         'ц' => 'ts',
         'ч' => 'ch',
         'ш' => 'sh',
-        'щ' => 'shch',
+        'щ' => 'sch',
         'ъ' => '',
         'ы' => 'y',
         'ь' => '',
@@ -53,6 +53,9 @@ class Str
         'я' => 'ya',
         "'" => '',
     ];
+
+    /** @var string */
+    protected static $slugDelimiter = '_';
 
     /**
      * @param string $char
@@ -146,13 +149,13 @@ class Str
      */
     public static function getSlug($string, $characters = '')
     {
-        $pattern = '#[^a-z0-9_'.preg_quote($characters, '#').']+#';
+        $pattern = '#[^a-z0-9'.static::$slugDelimiter.preg_quote($characters, '#').']+#';
         $string = mb_strtolower($string, 'utf-8');
-        $string = strtr($string, static::$transliteration);
-        $string = preg_replace($pattern, '_', $string);
-        $string = preg_replace('#_{2,}#', '_', $string);
+        $string = strtr($string, static::$slugTransliteration);
+        $string = preg_replace($pattern, static::$slugDelimiter, $string);
+        $string = preg_replace('#'.static::$slugDelimiter.'{2,}#', static::$slugDelimiter, $string);
 
-        return trim($string, '_');
+        return trim($string, static::$slugDelimiter);
     }
 
     /**
@@ -289,7 +292,7 @@ class Str
      *
      * @return string
      */
-    public static function fromCamelCase($string)
+    public static function toUnderscore($string)
     {
         $string = preg_replace(['#([a-z0-9])([A-Z])#', '#([A-Z]+)([A-Z][a-z])#'], '$1_$2', $string);
 
