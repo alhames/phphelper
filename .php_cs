@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * https://github.com/FriendsOfPHP/PHP-CS-Fixer
+ */
+
 $header = <<<EOF
 This file is part of the PHP Helper package.
 
