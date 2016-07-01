@@ -8,11 +8,12 @@
     "php": "^5.5"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.0"
+    "phpunit/phpunit": "~4.0",
+    "fabpot/php-cs-fixer": "*"
   },
   "authors": [
     {
-      "name": "Alhames",
+      "name": "Pavel Logachev",
       "email": "alhames@mail.ru",
       "homepage": "http://alhames.ru/"
     }

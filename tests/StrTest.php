@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the PHP Helper package.
+ *
+ * (c) Pavel Logachev <alhames@mail.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace PhpHelper\Tests;
 
 use PhpHelper\Str;
@@ -17,7 +26,7 @@ class StrTest extends \PHPUnit_Framework_TestCase
      */
     public function testOrd($code, $char)
     {
-        $this->assertEquals($code, Str::ord($char));
+        $this->assertSame($code, Str::ord($char));
     }
 
     /**
@@ -28,7 +37,7 @@ class StrTest extends \PHPUnit_Framework_TestCase
      */
     public function testChr($code, $char)
     {
-        $this->assertEquals($char, Str::chr($code));
+        $this->assertSame($char, Str::chr($code));
     }
 
     /**
@@ -79,7 +88,7 @@ class StrTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSlug($string, $slug, $characters = '')
     {
-        $this->assertEquals($slug, Str::getSlug($string, $characters));
+        $this->assertSame($slug, Str::getSlug($string, $characters));
     }
 
     /**
@@ -148,12 +157,12 @@ class StrTest extends \PHPUnit_Framework_TestCase
      */
     public function testPad()
     {
-        $this->assertEquals('абв   ', Str::pad('абв', 6));
-        $this->assertEquals('   абв', Str::pad('абв', 6, ' ', STR_PAD_LEFT));
-        $this->assertEquals(' абв  ', Str::pad('абв', 6, ' ', STR_PAD_BOTH));
-        $this->assertEquals('абв---', Str::pad('абв', 6, '-'));
-        $this->assertEquals('00001', Str::pad(1, 5, 0, STR_PAD_LEFT));
-        $this->assertEquals('абвгд', Str::pad('абвгд', 3));
+        $this->assertSame('абв   ', Str::pad('абв', 6));
+        $this->assertSame('   абв', Str::pad('абв', 6, ' ', STR_PAD_LEFT));
+        $this->assertSame(' абв  ', Str::pad('абв', 6, ' ', STR_PAD_BOTH));
+        $this->assertSame('абв---', Str::pad('абв', 6, '-'));
+        $this->assertSame('00001', Str::pad(1, 5, 0, STR_PAD_LEFT));
+        $this->assertSame('абвгд', Str::pad('абвгд', 3));
     }
 
     /**
@@ -165,7 +174,7 @@ class StrTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertCase($string, $expected, $convention)
     {
-        $this->assertEquals($expected, Str::convertCase($string, $convention));
+        $this->assertSame($expected, Str::convertCase($string, $convention));
     }
 
     /**
