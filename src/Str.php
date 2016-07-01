@@ -1,9 +1,20 @@
 <?php
 
+/*
+ * This file is part of the PHP Helper package.
+ *
+ * (c) Pavel Logachev <alhames@mail.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace PhpHelper;
 
 /**
- * Class Str
+ * Class Str.
+ *
+ * @author Pavel Logachev <alhames@mail.ru>
  */
 class Str
 {
@@ -12,6 +23,13 @@ class Str
     const FILTER_CODE = 0b000100;
     const FILTER_PUNCTUATION = 0b001000;
     const FILTER_SPACE = 0b010000;
+
+    const CASE_CAMEL_LOWER = 0b01100;
+    const CASE_CAMEL_UPPER = 0b00100;
+    const CASE_SNAKE_LOWER = 0b00010;
+    const CASE_SNAKE_UPPER = 0b10010;
+    const CASE_KEBAB_LOWER = 0b00011;
+    const CASE_KEBAB_UPPER = 0b00111;
 
     /** @var string */
     protected static $filterCodeMask = "[%%%'04X]";
@@ -87,7 +105,7 @@ class Str
      *               замещает все символы на их html-сущности, кроме базовых печатных и кирилицы
      * FILTER_CODE - замещает все символы на их код, кроме базовых печатных и кирилицы
      * FILTER_PUNCTUATION - заменяет все возможные виды дефисов/тире и кавычек на - (x2D) и " (x22) соответсвтенно
-     * FILTER_SPACE - заменяет все последовательности пробельных символов на пробел (x20)
+     * FILTER_SPACE - заменяет все последовательности пробельных символов на пробел (x20).
      *
      * @param string $string
      * @param int    $mode
@@ -169,7 +187,7 @@ class Str
         $max = mb_strlen($characters, 'utf-8') - 1;
         $string = '';
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $string .= mb_substr($characters, mt_rand(0, $max), 1, 'utf-8');
         }
 
@@ -177,6 +195,8 @@ class Str
     }
 
     /**
+     * @todo Вынести кириллицу
+     *
      * @param string $url
      * @param bool   $requiredScheme
      *
@@ -184,24 +204,24 @@ class Str
      */
     public static function isUrl($url, $requiredScheme = false)
     {
-        $pattern = '#^'
-            .($requiredScheme ? 'https?://' : '((https?:)?//)?') // scheme
-            .'([-_a-z0-9а-яё\.]+\.[a-zа-я]{2,10})' // domain
-            .'(([-_a-z0-9а-яё\./%\+]+)' // path
-            .'(\?[-_a-z0-9а-яё\./%\+\*"<>&=]*)?)?' // query
-            .'$#iu';
+        $pattern = '#^';
+        $pattern .= $requiredScheme ? 'https?://' : '((https?:)?//)?'; // scheme
+        $pattern .= '([-_a-z0-9а-яё\.]+\.[a-zа-я]{2,10})';             // domain
+        $pattern .= '(([-_a-z0-9а-яё\./%\+]+)';                        // path
+        $pattern .= '(\?[-_a-z0-9а-яё\./%\+\*"<>&=]*)?)?';             // query
+        $pattern .= '$#iu';
 
         return is_string($url) && preg_match($pattern, $url);
     }
 
     /**
-     * @param string $mail
+     * @param string $email
      *
      * @return bool
      */
-    public static function isMail($mail)
+    public static function isEmail($email)
     {
-        return is_string($mail) && preg_match('#^[^@\s]+@[^@\s]+\.[^@\s]+$#', $mail);
+        return is_string($email) && preg_match('#^[^@\s]+@[^@\s]+\.[^@\s]+$#', $email);
     }
 
     /**
@@ -212,19 +232,19 @@ class Str
      */
     public static function isHash($hash, $length = 32)
     {
-        return is_string($hash) && preg_match('#^[0-9a-f]{'.$length.'}$#i', $hash);
+        return (is_string($hash) || is_int($hash)) && preg_match('#^[0-9a-f]{'.$length.'}$#i', $hash);
     }
 
     /**
      * @param array $data
      * @param bool  $compressed
      *
-     * @return null|string
+     * @return string
      */
     public static function pack(array $data = null, $compressed = false)
     {
         if (empty($data)) {
-            return null;
+            return;
         }
 
         $packedData = serialize($data);
@@ -273,29 +293,49 @@ class Str
     }
 
     /**
-     * @param string $string
+     * @todo Check args
+     *
+     * @link https://en.wikipedia.org/wiki/Naming_convention_(programming)
+     *
+     * @param $string
+     * @param $convention
      *
      * @return string
      */
-    public static function toCamelCase($string)
+    public static function convertCase($string, $convention)
     {
+        $patterns = [
+            '#([a-z])([A-Z])#',
+            '#([A-Z]+)([A-Z][a-z])#',
+            '#([a-z])([0-9])#i',
+            '#([0-9])([a-z])#i',
+        ];
+        $string = preg_replace($patterns, '$1 $2', $string);
         $string = preg_replace('#[^a-z0-9]+#i', ' ', $string);
-        $string = ucwords($string);
+        $string = trim($string);
 
-        return str_replace(' ', '', $string);
-    }
+        if ($convention & 0b10000) {
+            $string = strtoupper($string);
+        } else {
+            $string = strtolower($string);
+        }
 
-    /**
-     * @link http://stackoverflow.com/a/35719689/1378653
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    public static function toUnderscore($string)
-    {
-        $string = preg_replace(['#([a-z0-9])([A-Z])#', '#([A-Z]+)([A-Z][a-z])#'], '$1_$2', $string);
+        if ($convention & 0b100) {
+            $string = ucwords($string);
+        }
 
-        return strtolower($string);
+        if ($convention & 0b10) {
+            $replace = $convention & 0b1 ? '-' : '_';
+        } else {
+            $replace = '';
+        }
+
+        $string = str_replace(' ', $replace, $string);
+
+        if ($convention & 0b1000) {
+            $string = lcfirst($string);
+        }
+
+        return $string;
     }
 }
