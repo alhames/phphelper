@@ -293,17 +293,23 @@ class Str
     }
 
     /**
-     * @todo Check args
-     *
      * @link https://en.wikipedia.org/wiki/Naming_convention_(programming)
      *
-     * @param $string
-     * @param $convention
+     * @param string $string
+     * @param int    $convention
      *
      * @return string
      */
     public static function convertCase($string, $convention)
     {
+        if (!is_string($string)) {
+            throw new Exception\InvalidArgumentException('First argument must be a string.');
+        }
+
+        if (!is_int($convention) || $convention <= 0 || $convention > 0b11111) {
+            throw new Exception\InvalidArgumentException('Second argument must be an integer.');
+        }
+
         $patterns = [
             '#([a-z])([A-Z])#',
             '#([A-Z]+)([A-Z][a-z])#',
