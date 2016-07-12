@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace PhpHelper\Sitemap;
+namespace PhpHelper\SiteMap;
 
 /**
- * Class Sitemap.
+ * Class SiteMap.
  *
  * @link http://www.sitemaps.org/
  */
-class SiteMap extends AbstractSitemap
+class SiteMap extends AbstractSiteMap
 {
     /** @var array  */
     protected static $frequency = ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'];

@@ -12,9 +12,9 @@
 namespace PhpHelper\SiteMap;
 
 /**
- * Class SitemapIndex.
+ * Class SiteIndex.
  */
-class SiteIndex extends AbstractSitemap
+class SiteIndex extends AbstractSiteMap
 {
     /**
      * @param string               $location
@@ -22,7 +22,7 @@ class SiteIndex extends AbstractSitemap
      *
      * @return self
      */
-    public function addSitemap($location, $lastModification = null)
+    public function addSiteMap($location, $lastModification = null)
     {
         $sitemapElement = $this->createElement('sitemap');
 

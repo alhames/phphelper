@@ -12,9 +12,9 @@
 namespace PhpHelper\SiteMap;
 
 /**
- * Class AbstractSitemap.
+ * Class AbstractSiteMap.
  */
-abstract class AbstractSitemap extends \DOMDocument
+abstract class AbstractSiteMap extends \DOMDocument
 {
     /** @var string */
     protected $baseUri;
