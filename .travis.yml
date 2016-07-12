@@ -9,8 +9,8 @@ php:
     - 7.0
     - hhvm
 
-#install:
-#    - composer install --prefer-source
+install:
+    - composer install --prefer-source
 
 matrix:
     fast_finish: true
