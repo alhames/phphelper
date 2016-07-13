@@ -79,10 +79,6 @@ class SiteMapTest extends \PHPUnit_Framework_TestCase
                     if (null !== $date[1]) {
                         $extra .= '<lastmod>'.$date[1].'</lastmod>';
                     }
-                    if (!isset($priority[1])) {
-                        var_dump($priority, $date, $actualLocation, $priorities);
-                        exit;
-                    }
                     $data[] = [
                         sprintf($pattern, $expectedLocation, $priority[1], $extra),
                         $actualLocation,
