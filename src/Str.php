@@ -344,4 +344,18 @@ class Str
 
         return $string;
     }
+
+    /**
+     * Return class name without namespace
+     *
+     * @link http://stackoverflow.com/a/27457689/1378653
+     *
+     * @param $object
+     *
+     * @return string
+     */
+    public static function getShortClassName($object)
+    {
+        return substr(strrchr(get_class($object), '\\'), 1);
+    }
 }
