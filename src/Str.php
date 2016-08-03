@@ -73,7 +73,7 @@ class Str
     ];
 
     /** @var string */
-    protected static $slugDelimiter = '_';
+    protected static $slugDelimiter = '-';
 
     /**
      * @param string $char
@@ -302,14 +302,6 @@ class Str
      */
     public static function convertCase($string, $convention)
     {
-        if (!is_string($string)) {
-            throw new Exception\InvalidArgumentException('First argument must be a string.');
-        }
-
-        if (!is_int($convention) || $convention <= 0 || $convention > 0b11111) {
-            throw new Exception\InvalidArgumentException('Second argument must be an integer.');
-        }
-
         $patterns = [
             '#([a-z])([A-Z])#',
             '#([A-Z]+)([A-Z][a-z])#',
@@ -346,7 +338,7 @@ class Str
     }
 
     /**
-     * Return class name without namespace
+     * Return class name without namespace.
      *
      * @link http://stackoverflow.com/a/27457689/1378653
      *
