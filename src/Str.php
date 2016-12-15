@@ -32,7 +32,7 @@ class Str
     const CASE_KEBAB_UPPER = 0b00111;
 
     /** @var string */
-    protected static $filterCodeMask = "[%%%'04X]";
+    protected static $filterCodeFormat = "[%%%'04X]";
 
     /** @var array */
     protected static $slugTransliteration = [
@@ -75,6 +75,9 @@ class Str
     /** @var string */
     protected static $slugDelimiter = '-';
 
+    /** @var string */
+    protected static $emailPattern = '#^[0-9a-z\!\#\$%&\'\*\+\-/\=\?\^_`\{\|\}~]+@[-a-z0-9\.]+\.[a-z]+$#i';
+
     /**
      * @param string $char
      *
@@ -100,19 +103,12 @@ class Str
     }
 
     /**
-     * FILTER_TEXT - удаляет все символы, кроме базовых печатных, кирилицы, табуляции и перевода строки
-     * FILTER_HTML - удаляет все непечатные базовые символы, кроме табуляции и перевода строки;
-     *               замещает все символы на их html-сущности, кроме базовых печатных и кирилицы
-     * FILTER_CODE - замещает все символы на их код, кроме базовых печатных и кирилицы
-     * FILTER_PUNCTUATION - заменяет все возможные виды дефисов/тире и кавычек на - (x2D) и " (x22) соответсвтенно
-     * FILTER_SPACE - заменяет все последовательности пробельных символов на пробел (x20).
-     *
      * @param string $string
-     * @param int    $mode
+     * @param int    $options
      *
      * @return string
      */
-    public static function filter($string, $mode = self::FILTER_TEXT)
+    public static function filter($string, $options = self::FILTER_TEXT)
     {
         // 09: \t
         // 0A: \n
@@ -120,31 +116,31 @@ class Str
         // 400-45F: Cyrillic (2-bytes) (not all)
         // 202E: Right-To-Left Override
 
-        if ($mode & self::FILTER_CODE) {
+        if ($options & self::FILTER_CODE) {
             return preg_replace_callback(
                 '#[^\x20-\x7E\x{400}-\x{45F}]#u',
                 function ($data) {
-                    return sprintf(static::$filterCodeMask, static::ord($data[0]));
+                    return sprintf(static::$filterCodeFormat, static::ord($data[0]));
                 },
                 $string
             );
         }
 
-        if ($mode & self::FILTER_PUNCTUATION) {
+        if ($options & self::FILTER_PUNCTUATION) {
             $string = preg_replace('#[\x{2010}-\x{2015}\x{2053}]#u', '-', $string);
             $string = preg_replace('#[\xAB\xBB\x{2018}-\x{201F}\x{2039}\x{203A}]#u', '"', $string);
             $string = preg_replace('#[\x{2116}]#u', '#', $string);
         }
 
-        if ($mode & self::FILTER_SPACE) {
+        if ($options & self::FILTER_SPACE) {
             $string = preg_replace('#\s+#u', ' ', $string);
         }
 
-        if ($mode & self::FILTER_TEXT) {
+        if ($options & self::FILTER_TEXT) {
             return preg_replace('#[^\n\t\x20-\x7E\x{400}-\x{45F}]+#u', '', $string);
         }
 
-        if ($mode & self::FILTER_HTML) {
+        if ($options & self::FILTER_HTML) {
             $string = preg_replace('#[\x00-\x08\x0B-\x1F\x{202E}]+#u', '', $string);
 
             return preg_replace_callback(
@@ -215,13 +211,15 @@ class Str
     }
 
     /**
+     * @link https://en.wikipedia.org/wiki/Email_address#RFC_specification
+     *
      * @param string $email
      *
      * @return bool
      */
     public static function isEmail($email)
     {
-        return is_string($email) && preg_match('#^[^@\s]+@[^@\s]+\.[^@\s]+$#', $email);
+        return is_string($email) && preg_match(static::$emailPattern, $email);
     }
 
     /**
