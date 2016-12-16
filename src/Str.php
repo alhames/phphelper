@@ -73,9 +73,6 @@ class Str
     ];
 
     /** @var string */
-    protected static $slugDelimiter = '-';
-
-    /** @var string */
     protected static $emailPattern = '#^[0-9a-z\!\#\$%&\'\*\+\-/\=\?\^_`\{\|\}~]+@[-a-z0-9\.]+\.[a-z]+$#i';
 
     /**
@@ -158,18 +155,19 @@ class Str
     /**
      * @param string $string
      * @param string $characters
+     * @param string $placeholder
      *
      * @return string
      */
-    public static function getSlug($string, $characters = '')
+    public static function getSlug($string, $characters = '', $placeholder = '-')
     {
-        $pattern = '#[^a-z0-9'.static::$slugDelimiter.preg_quote($characters, '#').']+#';
+        $pattern = '#[^a-z0-9'.preg_quote($characters, '#').$placeholder.']+#';
         $string = mb_strtolower($string, 'utf-8');
         $string = strtr($string, static::$slugTransliteration);
-        $string = preg_replace($pattern, static::$slugDelimiter, $string);
-        $string = preg_replace('#'.static::$slugDelimiter.'{2,}#', static::$slugDelimiter, $string);
+        $string = preg_replace($pattern, $placeholder, $string);
+        $string = preg_replace('#'.$placeholder.'{2,}#', $placeholder, $string);
 
-        return trim($string, static::$slugDelimiter);
+        return trim($string, $placeholder);
     }
 
     /**
