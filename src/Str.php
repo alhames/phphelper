@@ -189,8 +189,6 @@ class Str
     }
 
     /**
-     * @todo Вынести кириллицу
-     *
      * @param string $url
      * @param bool   $requiredScheme
      *
@@ -221,8 +219,8 @@ class Str
     }
 
     /**
-     * @param string $hash
-     * @param int    $length
+     * @param string|int $hash
+     * @param int        $length
      *
      * @return bool
      */
@@ -232,15 +230,15 @@ class Str
     }
 
     /**
-     * @param array $data
-     * @param bool  $compressed
+     * @param mixed|null $data
+     * @param bool       $compressed
      *
-     * @return string
+     * @return string|null
      */
-    public static function pack(array $data = null, $compressed = false)
+    public static function pack($data, $compressed = false)
     {
-        if (empty($data)) {
-            return;
+        if (null === $data) {
+            return $data;
         }
 
         $packedData = serialize($data);
@@ -253,24 +251,22 @@ class Str
     }
 
     /**
-     * @param string $data
-     * @param bool   $compressed
+     * @param string|null $data
+     * @param bool        $compressed
      *
-     * @return array
+     * @return mixed|null
      */
     public static function unpack($data, $compressed = false)
     {
-        if (empty($data)) {
-            return [];
+        if (null === $data) {
+            return $data;
         }
-
-        $unpackedData = $data;
 
         if ($compressed) {
-            $unpackedData = gzdecode($unpackedData);
+            $data = gzdecode($data);
         }
 
-        return unserialize($unpackedData);
+        return unserialize($data);
     }
 
     /**
@@ -338,7 +334,7 @@ class Str
      *
      * @link http://stackoverflow.com/a/27457689/1378653
      *
-     * @param $object
+     * @param object $object
      *
      * @return string
      */
