@@ -111,26 +111,132 @@ class StrTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRandomString()
     {
-        // todo
-    }
+        $randomStrings = [];
+        for ($i = 0; $i < 10000; $i++) {
+            $randomStrings[] = Str::getRandomString();
+        }
 
-    public function testIsUrl()
-    {
-        // todo
-    }
-
-    /**
-     *
-     */
-    public function testIsEmail()
-    {
-        $this->assertTrue(Str::isEmail('user@domain.com'));
-        $this->assertFalse(Str::isEmail('domain.com'));
+        $this->assertCount(10000, array_unique($randomStrings));
+        $this->assertSame(111, strlen(Str::getRandomString(111)));
     }
 
     /**
+     * @dataProvider validUrlProvider
      *
+     * @param string $url
+     * @param bool   $requiredScheme
      */
+    public function testIsUrl($url, $requiredScheme = false)
+    {
+        $this->assertTrue(Str::isUrl($url, $requiredScheme), 'Failed: '.$url);
+    }
+
+    /**
+     * @dataProvider invalidUrlProvider
+     *
+     * @param string $url
+     * @param bool   $requiredScheme
+     */
+    public function testIsUrlInvalid($url, $requiredScheme = false)
+    {
+        $this->assertFalse(Str::isUrl($url, $requiredScheme));
+    }
+
+    /**
+     * @return array
+     */
+    public function validUrlProvider()
+    {
+        return [
+            ['google.com'],
+            ['www.google.com'],
+            ['http://google.com'],
+            ['http://www.google.com'],
+            ['https://google.com'],
+            ['https://google.com/'],
+            ['//google.com'],
+            ['http://google.com/?test=abc'],
+            ['http://google.com/path/?test=abc'],
+            ['http://google.com/path/?test=abc', true],
+            ['https://google.com/path/?test=abc#fdf', true],
+            ['i.ua'],
+            ['abcdef.gallery'],
+            ['https://ru.wikipedia.org/wiki/%D0%A0%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%80%D0%BD%D1%8B%D0%B5_%D0%B2%D1%8B%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F'],
+            ['https://ru.wikipedia.org/wiki/Регулярные_выражения'],
+            ['my-site.com:8080'],
+            ['my-site.com:8080/index.html'],
+            ['http://my-site.com/video.mp4'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidUrlProvider()
+    {
+        return [
+            ['google.com', true],
+            ['//google.com', true],
+            ['google'],
+            ['$google.com'],
+            ['http://.google.com'],
+            ['http://google..com'],
+            ['http://google.com.'],
+            ['http://-google.com'],
+            ['http://google-.com'],
+            ['ftp://google.com'],
+            ['ftp://google.com/'],
+        ];
+    }
+
+    /**
+     * @link https://habrahabr.ru/post/318698/
+     *
+     * @dataProvider emailProvider
+     *
+     * @param string $email
+     * @param bool   $result
+     */
+    public function testIsEmail($email, $result)
+    {
+        $this->assertSame($result, Str::isEmail($email), 'Failed: '.$email);
+    }
+
+    /**
+     * @return array
+     */
+    public function emailProvider()
+    {
+        return [
+            // valid emails
+            ['AbC@domain.com', true],
+            ['user@domain.com', true],
+            ['abc@gmail.com', true],
+            ['abc+1@gmail.com', true],
+            ['ab.c@gmail.com', true],
+            ['a-b.c@gmail.com', true],
+            ['a.b.c@gmail.com', true],
+            ['a@i.ua', true],
+            ['a@i.gallery', true],
+
+            // invalid emails
+            ['domain.com', false],
+            ['abc@', false],
+            ['abc@gmail', false],
+            ['a@bc@gmail.com', false],
+            ['abc@-gmail.com', false],
+            ['abc@gmail-.com', false],
+            ['abc@.gmail.com', false],
+            ['abc@gmail.com.', false],
+            ['abc@gmail..com', false],
+            ['.abc@gmail.com', false],
+            ['abc.@gmail.com', false],
+            ['ab..c@gmail.com', false],
+            ['"abc"@gmail.com', false],
+            ['-f"attacker\" -oQ/tmp/ -X/var/www/cache/phpcode.php  some"@email.com', false],
+        ];
+    }
+
     public function testIsHash()
     {
         $this->assertTrue(Str::isHash(md5('test')));
@@ -143,19 +249,40 @@ class StrTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(Str::isHash(['array']));
     }
 
-    public function testPack()
+    /**
+     * @dataProvider packProvider
+     *
+     * @param mixed $var
+     */
+    public function testPack($var)
     {
-        // todo
-    }
+        $packed = Str::pack($var);
+        $unpacked = Str::unpack($packed);
+        $compressed = Str::pack($var, true);
+        $uncompressed = Str::unpack($compressed, true);
 
-    public function testUnpack()
-    {
-        // todo
+        $this->assertEquals($var, $unpacked);
+        $this->assertEquals($var, $uncompressed);
     }
 
     /**
-     *
+     * @return array
      */
+    public function packProvider()
+    {
+        $object = new \stdClass();
+        $object->property = Str::getRandomString();
+
+        return [
+            [Str::getRandomString()],
+            [[mt_rand(1, 999), mt_rand(1, 999), mt_rand(1, 999)]],
+            [$object],
+            [null],
+            [mt_rand(1, 999)],
+            [mt_rand(1, 9) / 10],
+        ];
+    }
+
     public function testPad()
     {
         $this->assertSame('абв   ', Str::pad('абв', 6));
@@ -228,5 +355,11 @@ class StrTest extends \PHPUnit_Framework_TestCase
         }
 
         return $data;
+    }
+
+    public function testGetShortClassName()
+    {
+        $strObject = new Str();
+        $this->assertSame('Str', Str::getShortClassName($strObject));
     }
 }
