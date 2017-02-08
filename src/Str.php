@@ -73,7 +73,7 @@ class Str
     ];
 
     /** @var string */
-    protected static $emailPattern = '#^[0-9a-z\!\#\$%&\'\*\+\-/\=\?\^_`\{\|\}~]+@[-a-z0-9\.]+\.[a-z]+$#i';
+    protected static $emailPattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
 
     /**
      * @param string $char
@@ -189,6 +189,8 @@ class Str
     }
 
     /**
+     * @todo http://php.net/manual/ru/function.idn-to-utf8.php
+     *
      * @param string $url
      * @param bool   $requiredScheme
      *
@@ -196,18 +198,14 @@ class Str
      */
     public static function isUrl($url, $requiredScheme = false)
     {
-        $pattern = '#^';
-        $pattern .= $requiredScheme ? 'https?://' : '((https?:)?//)?'; // scheme
-        $pattern .= '([-_a-z0-9а-яё\.]+\.[a-zа-я]{2,10})';             // domain
-        $pattern .= '(([-_a-z0-9а-яё\./%\+]+)';                        // path
-        $pattern .= '(\?[-_a-z0-9а-яё\./%\+\*"<>&=]*)?)?';             // query
-        $pattern .= '$#iu';
+        $pattern = '#^'.($requiredScheme ? 'https?://' : '((https?:)?//)?')
+            .'[a-z0-9]([-a-z0-9\.]*[a-z0-9])?\.[a-z]{2,10}(:\d{1,5})?(/.*)?$#i';
 
         return is_string($url) && preg_match($pattern, $url);
     }
 
     /**
-     * @link https://en.wikipedia.org/wiki/Email_address#RFC_specification
+     * @see http://www.regular-expressions.info/email.html
      *
      * @param string $email
      *
@@ -285,7 +283,7 @@ class Str
     }
 
     /**
-     * @link https://en.wikipedia.org/wiki/Naming_convention_(programming)
+     * @see https://en.wikipedia.org/wiki/Naming_convention_(programming)
      *
      * @param string $string
      * @param int    $convention
@@ -332,7 +330,7 @@ class Str
     /**
      * Return class name without namespace.
      *
-     * @link http://stackoverflow.com/a/27457689/1378653
+     * @see http://stackoverflow.com/a/27457689/1378653
      *
      * @param object $object
      *
