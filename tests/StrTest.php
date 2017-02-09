@@ -74,9 +74,46 @@ class StrTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    public function testFilter()
+    /**
+     * @dataProvider filterProvider
+     *
+     * @param string $expected
+     * @param string $string
+     * @param int    $options
+     */
+    public function testFilter($string, $expected, $options = Str::FILTER_TEXT)
     {
-        // todo
+        $this->assertSame($expected, Str::filter($string, $options));
+    }
+
+    /**
+     * @return array
+     */
+    public function filterProvider()
+    {
+        return [
+            ['Hello world!', 'Hello world!'],
+            ['Hi! ©', 'Hi! '],
+            ['Hi! ©', 'Hi! ', Str::FILTER_TEXT],
+            ['Hi! ©', 'Hi! &#169;', Str::FILTER_HTML],
+            ['Hi! ©', 'Hi! [%00A9]', Str::FILTER_CODE],
+            ['Hi! ©', 'Hi!', Str::FILTER_TEXT | Str::FILTER_SPACE],
+            ['Hi! ©', 'Hi! &#169;', Str::FILTER_HTML | Str::FILTER_SPACE],
+
+            [" Hi! ©\nHello! ", " Hi! \nHello! ", Str::FILTER_TEXT],
+            [" Hi! ©\nHello! ", " Hi! &#169;\nHello! ", Str::FILTER_HTML],
+            [" Hi! ©\nHello! ", 'Hi! Hello!', Str::FILTER_TEXT | Str::FILTER_SPACE],
+            [" Hi! ©\nHello! ", 'Hi! &#169; Hello!', Str::FILTER_HTML | Str::FILTER_SPACE],
+
+            ['Почти «Сталкер»:  впечатления — обзор', 'Почти Сталкер:  впечатления  обзор', Str::FILTER_TEXT],
+            ['Почти «Сталкер»:  впечатления — обзор', 'Почти &#171;Сталкер&#187;:  впечатления &#8212; обзор', Str::FILTER_HTML],
+            ['Почти «Сталкер»:  впечатления — обзор', 'Почти Сталкер: впечатления обзор', Str::FILTER_TEXT | Str::FILTER_SPACE],
+            ['Почти «Сталкер»:  впечатления — обзор', 'Почти &#171;Сталкер&#187;: впечатления &#8212; обзор', Str::FILTER_HTML | Str::FILTER_SPACE],
+            ['Почти «Сталкер»:  впечатления — обзор', 'Почти "Сталкер":  впечатления - обзор', Str::FILTER_TEXT | Str::FILTER_PUNCTUATION],
+            ['Почти «Сталкер»:  впечатления — обзор', 'Почти "Сталкер":  впечатления - обзор', Str::FILTER_HTML | Str::FILTER_PUNCTUATION],
+            ['Почти «Сталкер»:  впечатления — обзор', 'Почти "Сталкер": впечатления - обзор', Str::FILTER_TEXT | Str::FILTER_PUNCTUATION | Str::FILTER_SPACE],
+            ['Почти «Сталкер»:  впечатления — обзор', 'Почти "Сталкер": впечатления - обзор', Str::FILTER_HTML | Str::FILTER_PUNCTUATION | Str::FILTER_SPACE],
+        ];
     }
 
     /**

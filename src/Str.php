@@ -134,19 +134,21 @@ class Str
         }
 
         if ($options & self::FILTER_TEXT) {
-            return preg_replace('#[^\n\t\x20-\x7E\x{400}-\x{45F}]+#u', '', $string);
-        }
-
-        if ($options & self::FILTER_HTML) {
+            $string = preg_replace('#[^\n\t\x20-\x7E\x{400}-\x{45F}]+#u', '', $string);
+        } elseif ($options & self::FILTER_HTML) {
             $string = preg_replace('#[\x00-\x08\x0B-\x1F\x{202E}]+#u', '', $string);
-
-            return preg_replace_callback(
+            $string = preg_replace_callback(
                 '#[^\n\t\x20-\x7E\x{400}-\x{45F}]#u',
                 function ($data) {
                     return '&#'.static::ord($data[0]).';';
                 },
                 $string
             );
+        }
+
+        if ($options & self::FILTER_SPACE) {
+            $string = preg_replace('# {2,}#', ' ', $string);
+            $string = trim($string);
         }
 
         return $string;
