@@ -6,6 +6,8 @@
 
 Collection of classes and functions to simplify the work with PHP.
 
+[Documentation for **Str** class](/doc/Str.rst)
+
 [ico-license]: https://img.shields.io/github/license/alhames/phphelper.svg
 [ico-version-dev]: https://img.shields.io/packagist/vpre/alhames/phphelper.svg
 [ico-travis]: https://img.shields.io/travis/alhames/phphelper.svg
