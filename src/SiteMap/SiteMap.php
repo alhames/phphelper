@@ -22,12 +22,12 @@ class SiteMap extends AbstractSiteMap
     protected static $frequency = ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'];
 
     /**
-     * @param string               $location
-     * @param float|string|int     $priority
-     * @param int|string|\DateTime $lastModification
-     * @param string               $changeFrequency
+     * @param string                    $location
+     * @param float|string|int          $priority
+     * @param int|string|\DateTime|null $lastModification
+     * @param string|null               $changeFrequency
      *
-     * @return self
+     * @return static
      */
     public function addUrl($location, $priority = 0.5, $lastModification = null, $changeFrequency = null)
     {
@@ -59,7 +59,7 @@ class SiteMap extends AbstractSiteMap
             $urlElement->appendChild($lastmodElement);
         }
 
-        if (null !== $changeFrequency) {
+        if (null !== $changeFrequency && in_array($changeFrequency, static::$frequency)) {
             $changefreqElement = $this->createElement('changefreq');
             $changefreqElement->appendChild($this->createTextNode($changeFrequency));
             $urlElement->appendChild($changefreqElement);
