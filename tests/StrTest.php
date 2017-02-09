@@ -227,7 +227,7 @@ class StrTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @link https://habrahabr.ru/post/318698/
+     * @see https://habrahabr.ru/post/318698/
      *
      * @dataProvider emailProvider
      *

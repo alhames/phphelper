@@ -1,7 +1,7 @@
 <?php
 
-/*
- * https://github.com/FriendsOfPHP/PHP-CS-Fixer
+/**
+ * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer
  */
 
 $header = <<<EOF
@@ -13,26 +13,30 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 EOF;
 
-Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);
-
-$finder = Symfony\CS\Finder\DefaultFinder::create()
-    ->files()
-    ->name('*.php')
-    ->in(__DIR__.'/src')
-    ->in(__DIR__.'/tests')
-;
-
-return Symfony\CS\Config\Config::create()
-    // use default SYMFONY_LEVEL and extra fixers:
-    ->fixers(array(
-        'header_comment',
-        'ordered_use',
-        'php_unit_construct',
-        'php_unit_strict',
-        'phpdoc_order',
-        'short_array_syntax',
-        'strict',
-        'strict_param',
-    ))
-    ->finder($finder)
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        '@Symfony:risky' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'no_unreachable_default_argument_value' => false,
+        'heredoc_to_nowdoc' => false,
+        'ordered_class_elements' => true,
+        'ordered_imports' => true,
+        'phpdoc_add_missing_param_annotation' => true,
+        'phpdoc_order' => true,
+        'pre_increment' => false,
+        'header_comment' => ['header' => $header],
+        'strict_comparison' => true,
+        'strict_param' => true,
+    ])
+    ->setRiskyAllowed(true)
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->files()
+            ->name('*.php')
+            ->in([
+                __DIR__.'/src',
+                __DIR__.'/tests'
+            ])
+    )
 ;

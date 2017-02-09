@@ -14,11 +14,11 @@ namespace PhpHelper\SiteMap;
 /**
  * Class SiteMap.
  *
- * @link http://www.sitemaps.org/
+ * @see http://www.sitemaps.org/
  */
 class SiteMap extends AbstractSiteMap
 {
-    /** @var array  */
+    /** @var array */
     protected static $frequency = ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'];
 
     /**
@@ -59,7 +59,7 @@ class SiteMap extends AbstractSiteMap
             $urlElement->appendChild($lastmodElement);
         }
 
-        if (null !== $changeFrequency && in_array($changeFrequency, static::$frequency)) {
+        if (null !== $changeFrequency && in_array($changeFrequency, static::$frequency, true)) {
             $changefreqElement = $this->createElement('changefreq');
             $changefreqElement->appendChild($this->createTextNode($changeFrequency));
             $urlElement->appendChild($changefreqElement);
