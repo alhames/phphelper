@@ -4,9 +4,6 @@
   "description": "PHP Helpers",
   "homepage": "https://github.com/alhames/phphelper",
   "license": "MIT",
-  "require": {
-    "php": "^5.4 || ^7.0"
-  },
   "authors": [
     {
       "name": "Pavel Logachev",
@@ -14,6 +11,12 @@
       "homepage": "https://alhames.ru/"
     }
   ],
+  "require": {
+    "php": "^5.4 || ^7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.0"
+  },
   "support": {
     "issues": "https://github.com/alhames/phphelper/issues"
   },
