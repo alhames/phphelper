@@ -191,8 +191,6 @@ class Str
     }
 
     /**
-     * @todo http://php.net/manual/ru/function.idn-to-utf8.php
-     *
      * @param string $url
      * @param bool   $requiredScheme
      *
