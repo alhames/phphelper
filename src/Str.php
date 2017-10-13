@@ -80,11 +80,11 @@ class Str
      *
      * @return int
      */
-    public static function ord($char)
+    public static function ord(string $char): int
     {
         $char = mb_convert_encoding($char, 'UTF-32BE', 'UTF-8');
 
-        return unpack('Ncode', $char)['code'];
+        return (int) unpack('Ncode', $char)['code'];
     }
 
     /**
@@ -92,11 +92,11 @@ class Str
      *
      * @return string
      */
-    public static function chr($code)
+    public static function chr(int $code): string
     {
         $char = pack('N', $code);
 
-        return mb_convert_encoding($char, 'UTF-8', 'UTF-32BE');
+        return (string) mb_convert_encoding($char, 'UTF-8', 'UTF-32BE');
     }
 
     /**
@@ -105,7 +105,7 @@ class Str
      *
      * @return string
      */
-    public static function filter($string, $options = self::FILTER_TEXT)
+    public static function filter(string $string, int $options = self::FILTER_TEXT): string
     {
         // 09: \t
         // 0A: \n
@@ -125,7 +125,8 @@ class Str
 
         if ($options & self::FILTER_PUNCTUATION) {
             $string = preg_replace('#[\x{2010}-\x{2015}\x{2053}]#u', '-', $string);
-            $string = preg_replace('#[\xAB\xBB\x{2018}-\x{201F}\x{2039}\x{203A}]#u', '"', $string);
+            $string = preg_replace('#[\x60\xB4\x{2B9}\x{2BB}-\x{2BF}\x{2018}-\x{201B}]#u', '\'', $string);
+            $string = preg_replace('#[\xAB\xBB\x{2BA}\x{201C}-\x{201F}\x{2039}\x{203A}]#u', '"', $string);
             $string = preg_replace('#[\x{2116}]#u', '#', $string);
         }
 
@@ -161,7 +162,7 @@ class Str
      *
      * @return string
      */
-    public static function getSlug($string, $characters = '', $placeholder = '-')
+    public static function getSlug(string $string, string $characters = '', string $placeholder = '-'): string
     {
         $pattern = '#[^a-z0-9'.preg_quote($characters, '#').$placeholder.']+#';
         $string = mb_strtolower($string, 'utf-8');
@@ -178,32 +179,29 @@ class Str
      *
      * @return string
      */
-    public static function getRandomString($length = 32, $characters = 'qwertyuiopasdfghjklzxcvbnm0123456789')
+    public static function getRandomString(int $length = 32, string $characters = 'qwertyuiopasdfghjklzxcvbnm0123456789'): string
     {
         $max = mb_strlen($characters, 'utf-8') - 1;
         $string = '';
 
         for ($i = 0; $i < $length; ++$i) {
-            $string .= mb_substr($characters, mt_rand(0, $max), 1, 'utf-8');
+            $string .= mb_substr($characters, random_int(0, $max), 1, 'utf-8');
         }
 
         return $string;
     }
 
     /**
-     * @todo http://php.net/manual/ru/function.idn-to-utf8.php
-     *
      * @param string $url
      * @param bool   $requiredScheme
      *
      * @return bool
      */
-    public static function isUrl($url, $requiredScheme = false)
+    public static function isUrl(string $url, bool $requiredScheme = false): bool
     {
-        $pattern = '#^'.($requiredScheme ? 'https?://' : '((https?:)?//)?')
-            .'[a-z0-9]([-a-z0-9\.]*[a-z0-9])?\.[a-z]{2,10}(:\d{1,5})?(/.*)?$#i';
+        $pattern = '#^'.($requiredScheme ? 'https?://' : '((https?:)?//)?').'[a-z0-9]([-a-z0-9\.]*[a-z0-9])?\.[a-z]{2,10}(:\d{1,5})?(/.*)?$#i';
 
-        return is_string($url) && preg_match($pattern, $url);
+        return preg_match($pattern, $url);
     }
 
     /**
@@ -213,9 +211,9 @@ class Str
      *
      * @return bool
      */
-    public static function isEmail($email)
+    public static function isEmail(string $email): bool
     {
-        return is_string($email) && preg_match(static::$emailPattern, $email);
+        return preg_match(static::$emailPattern, $email);
     }
 
     /**
@@ -224,7 +222,7 @@ class Str
      *
      * @return bool
      */
-    public static function isHash($hash, $length = 32)
+    public static function isHash($hash, int $length = 32): bool
     {
         return (is_string($hash) || is_int($hash)) && preg_match('#^[0-9a-f]{'.$length.'}$#i', $hash);
     }
@@ -235,7 +233,7 @@ class Str
      *
      * @return string|null
      */
-    public static function pack($data, $compressed = false)
+    public static function pack($data, bool $compressed = false)
     {
         if (null === $data) {
             return $data;
@@ -256,7 +254,7 @@ class Str
      *
      * @return mixed|null
      */
-    public static function unpack($data, $compressed = false)
+    public static function unpack($data, bool $compressed = false)
     {
         if (null === $data) {
             return $data;
@@ -277,7 +275,7 @@ class Str
      *
      * @return string
      */
-    public static function pad($input, $length, $string = ' ', $type = STR_PAD_RIGHT)
+    public static function pad(string $input, int $length, string $string = ' ', int $type = STR_PAD_RIGHT): string
     {
         $diff = strlen($input) - mb_strlen($input, 'utf-8');
 
@@ -292,7 +290,7 @@ class Str
      *
      * @return string
      */
-    public static function convertCase($string, $convention)
+    public static function convertCase(string $string, int $convention): string
     {
         $patterns = [
             '#([a-z])([A-Z])#',
@@ -338,7 +336,7 @@ class Str
      *
      * @return string
      */
-    public static function getShortClassName($object)
+    public static function getShortClassName($object): string
     {
         return substr(strrchr(get_class($object), '\\'), 1);
     }

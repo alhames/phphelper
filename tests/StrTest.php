@@ -16,7 +16,7 @@ use PhpHelper\Str;
 /**
  * Class StrTest.
  */
-class StrTest extends \PHPUnit_Framework_TestCase
+class StrTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider charProvider
