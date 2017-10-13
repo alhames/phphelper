@@ -125,8 +125,7 @@ class Str
 
         if ($options & self::FILTER_PUNCTUATION) {
             $string = preg_replace('#[\x{2010}-\x{2015}\x{2053}]#u', '-', $string);
-            $string = preg_replace('#[\x60\xB4\x{2B9}\x{2BB}-\x{2BF}\x{2018}-\x{201B}]#u', '\'', $string);
-            $string = preg_replace('#[\xAB\xBB\x{2BA}\x{201C}-\x{201F}\x{2039}\x{203A}]#u', '"', $string);
+            $string = preg_replace('#[\xAB\xBB\x{2018}-\x{201F}\x{2039}\x{203A}]#u', '"', $string);
             $string = preg_replace('#[\x{2116}]#u', '#', $string);
         }
 
