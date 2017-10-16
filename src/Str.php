@@ -75,6 +75,8 @@ class Str
     /** @var string */
     protected static $emailPattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
 
+    protected static $interpolatePattern = '{%s}';
+
     /**
      * @param string $char
      *
@@ -332,12 +334,49 @@ class Str
      *
      * @see http://stackoverflow.com/a/27457689/1378653
      *
-     * @param object $object
+     * @param string|object $class
      *
      * @return string
      */
-    public static function getShortClassName($object): string
+    public static function getShortClassName($class): string
     {
-        return substr(strrchr(get_class($object), '\\'), 1);
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
+
+        return substr(strrchr($class, '\\'), 1);
+    }
+
+    /**
+     * Interpolates context values into the message placeholders.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return string
+     */
+    public static function interpolate(string $message, array $context): string
+    {
+        $replace = [];
+        foreach ($context as $key => $value) {
+            $replace[sprintf(static::$interpolatePattern, $key)] = $value;
+        }
+
+        return strtr($message, $replace);
+    }
+
+    /**
+     * @see http://www.php-fig.org/psr/psr-6/
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    public static function filterCacheKey(string $key): string
+    {
+        $key = preg_replace('#[/-]#', '.', $key);
+        $key = preg_replace('#[^A-Za-z0-9_\.]#', '_', $key);
+
+        return strtolower($key);
     }
 }
