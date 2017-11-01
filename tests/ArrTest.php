@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the PHP Helper package.
+ *
+ * (c) Pavel Logachev <alhames@mail.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace PhpHelper\Tests;
 
 use PhpHelper\Arr;
@@ -56,10 +65,10 @@ class ArrTest extends \PHPUnit\Framework\TestCase
      * @dataProvider searchByColumnValueDataProvider
      *
      * @param array|null $expected
-     * @param array $array
-     * @param       $column
-     * @param       $value
-     * @param bool  $strict
+     * @param array      $array
+     * @param            $column
+     * @param            $value
+     * @param bool       $strict
      */
     public function testSearchByColumnValue($expected, array $array, $column, $value, bool $strict = false)
     {
@@ -113,16 +122,16 @@ class ArrTest extends \PHPUnit\Framework\TestCase
      */
     public function reduceAssocDataProvider()
     {
-        $toString = function($carry, $item, $key) {
+        $toString = function ($carry, $item, $key) {
             return sprintf('%s%s => %s;', $carry, $key, $item);
         };
-        $wrap = function($carry, $item, $key) {
+        $wrap = function ($carry, $item, $key) {
             $carry = $carry ?? [];
             $carry[sprintf('(%s)', $key)] = sprintf('<%s>', $item);
 
             return $carry;
         };
-        $filter = function($carry, $item, $key) {
+        $filter = function ($carry, $item, $key) {
             $carry = $carry ?? [];
             if ($key < 3 && $item > 2) {
                 $carry[$key] = $item;
