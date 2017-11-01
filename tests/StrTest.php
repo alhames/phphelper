@@ -398,5 +398,6 @@ class StrTest extends \PHPUnit\Framework\TestCase
     {
         $strObject = new Str();
         $this->assertSame('Str', Str::getShortClassName($strObject));
+        $this->assertSame('Str', Str::getShortClassName(Str::class));
     }
 }

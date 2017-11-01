@@ -18,6 +18,8 @@ namespace PhpHelper;
  */
 class Str
 {
+    const EOL = "\n";
+
     const FILTER_TEXT = 0b000001;
     const FILTER_HTML = 0b000010;
     const FILTER_CODE = 0b000100;

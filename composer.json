@@ -15,11 +15,8 @@
     "php": "^7.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.0",
-    "ezyang/htmlpurifier": "^4.8"
-  },
-  "suggest": {
-    "ezyang/htmlpurifier": "to use Html-helper"
+    "phpunit/phpunit": "^6.2",
+    "symfony/yaml": "^3.0"
   },
   "support": {
     "issues": "https://github.com/alhames/phphelper/issues"

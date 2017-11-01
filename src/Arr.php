@@ -50,7 +50,7 @@ class Arr
     }
 
     /**
-     * Создает массив, где в качестве ключей используется указанный столбец.
+     * Creates an array where the column is used as keys.
      *
      * @param array      $array
      * @param string|int $keyColumn
@@ -67,7 +67,7 @@ class Arr
     }
 
     /**
-     * Возвращает элемент массива, в котором столбец содержит указанное значение.
+     * Returns the array element where the column is equal to the specified value.
      *
      * @param array      $array
      * @param string|int $column
