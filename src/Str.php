@@ -111,8 +111,10 @@ class Str
      */
     public static function filter(string $string, int $options = self::FILTER_TEXT): string
     {
-        // 09: \t
-        // 0A: \n
+        // 09: Horizontal Tabulation (\t)
+        // 0A: New Line (\n)
+        // 0B: Vertical Tabulation (\v)
+        // A0: No-Break Space
         // 20-7E: Basic latin (1-byte)
         // 400-45F: Cyrillic (2-bytes) (not all)
         // 202E: Right-To-Left Override
@@ -128,18 +130,15 @@ class Str
         }
 
         if ($options & self::FILTER_PUNCTUATION) {
-            $string = preg_replace('#[\x{2010}-\x{2015}\x{2053}]#u', '-', $string);
-            $string = preg_replace('#[\x60\xB4\x{2B9}\x{2BB}-\x{2BF}\x{2018}-\x{201B}]#u', '\'', $string);
-            $string = preg_replace('#[\xAB\xBB\x{2BA}\x{201C}-\x{201F}\x{2039}\x{203A}]#u', '"', $string);
-            $string = preg_replace('#[\x{2116}]#u', '#', $string);
+            $string = static:: filterPunctuation($string);
         }
 
         if ($options & self::FILTER_SPACE) {
-            $string = preg_replace('#\s+#u', ' ', $string);
+            $string = preg_replace('#[\x9-\xD]+#u', ' ', $string);
         }
 
         if ($options & self::FILTER_TEXT) {
-            $string = preg_replace('#[^\n\t\x20-\x7E\x{400}-\x{45F}]+#u', '', $string);
+            $string = preg_replace('#[^\n\t\x20-\x7E\xA0\x{400}-\x{45F}]+#u', '', $string);
         } elseif ($options & self::FILTER_HTML) {
             $string = preg_replace('#[\x00-\x08\x0B-\x1F\x{202E}]+#u', '', $string);
             $string = preg_replace_callback(
@@ -157,6 +156,37 @@ class Str
         }
 
         return $string;
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function filterPunctuation(string $string): string
+    {
+        $string = preg_replace('#[\x{2010}-\x{2015}\x{2053}]#u', '-', $string);
+        $string = preg_replace('#[\x60\xB4\x{2B9}\x{2BB}-\x{2BF}\x{2018}-\x{201B}]#u', '\'', $string);
+        $string = preg_replace('#[\xAB\xBB\x{2BA}\x{201C}-\x{201F}\x{2039}\x{203A}]#u', '"', $string);
+        $string = preg_replace('#[\x{2116}]#u', '#', $string);
+
+        return $string;
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return string
+     */
+    public static function filterTitle(string $title): string
+    {
+        $title = html_entity_decode($title);
+        $title = static::filterPunctuation($title);
+        $title = preg_replace('#[\x9-\xD]+#', ' ', $title);
+        $title = preg_replace('#[^=\x20-\x3B\x3F-\x7E\xA0\x{400}-\x{45F}]+#u', '', $title);
+        $title = preg_replace('# {2,}#', ' ', $title);
+
+        return trim($title);
     }
 
     /**
