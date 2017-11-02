@@ -182,8 +182,7 @@ class Str
     {
         $title = html_entity_decode($title);
         $title = static::filterPunctuation($title);
-        $title = preg_replace('#[\x9-\xD]+#', ' ', $title);
-        $title = preg_replace('#[^=\x20-\x3B\x3F-\x7E\xA0\x{400}-\x{45F}]+#u', '', $title);
+        $title = preg_replace('#[^=\x20-\x3B\x3F-\x7E\xA0\x{400}-\x{45F}]+#u', ' ', $title);
         $title = preg_replace('# {2,}#', ' ', $title);
 
         return trim($title);
