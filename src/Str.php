@@ -134,7 +134,7 @@ class Str
         }
 
         if ($options & self::FILTER_SPACE) {
-            $string = preg_replace('#[\x9-\xD]+#u', ' ', $string);
+            $string = preg_replace('#[\x9-\xD\x85\x{2000}-\x{200A}\x{2028}\x{2029}]+#u', ' ', $string);
         }
 
         if ($options & self::FILTER_TEXT) {
