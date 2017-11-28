@@ -123,9 +123,9 @@ class StrTest extends \PHPUnit\Framework\TestCase
      * @param string $slug
      * @param string $characters
      */
-    public function testGetSlug($string, $slug, $characters = '')
+    public function testSlugify($string, $slug, $characters = '')
     {
-        $this->assertSame($slug, Str::getSlug($string, $characters));
+        $this->assertSame($slug, Str::slugify($string, $characters));
     }
 
     /**
