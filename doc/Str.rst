@@ -75,13 +75,13 @@ filter
     Его можно переопределить на любой другой формат, совместимый с `sprintf <http://php.net/sprintf>`_.
 
 
-getSlug
+slugify
 -------
 
 Описание
     ::
 
-        string getSlug ( string $string [, string $characters = '' [, $placeholder = '-' ] ] )
+        string slugify ( string $string [, string $characters = null [, string $placeholder = null ] ] )
 
     Транслитерирует строку и заменяет специальные символы на **$placeholder**.
 
@@ -96,7 +96,8 @@ getSlug
 Расширяемость
     По умолчанию транслитерация происходит только для букв русского алфавита.
     Изменить схему замены или добавить новые траслитерируемые символы можно переопределив
-    статическое свойство **$slugTransliteration**.
+    статическое свойство **$slugifyTransliteration**.
+    Изменить placeholder можно переопределив статическое свойство **$slugifyPlaceholder**.
 
 
 getRandomString

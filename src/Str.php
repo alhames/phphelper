@@ -37,7 +37,7 @@ class Str
     protected static $filterCodeFormat = "[%%%'04X]";
 
     /** @var array */
-    protected static $slugTransliteration = [
+    protected static $slugifyTransliteration = [
         'а' => 'a',
         'б' => 'b',
         'в' => 'v',
@@ -75,8 +75,12 @@ class Str
     ];
 
     /** @var string */
+    protected static $slugifyPlaceholder = '-';
+
+    /** @var string */
     protected static $emailPattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
 
+    /** @var string */
     protected static $interpolatePattern = '{%s}';
 
     /**
@@ -189,6 +193,28 @@ class Str
     }
 
     /**
+     * @param string      $string
+     * @param string|null $characters
+     * @param string|null $placeholder
+     *
+     * @return string
+     */
+    public static function slugify(string $string, string $characters = null, string $placeholder = null): string
+    {
+        $placeholder = $placeholder ?: static::$slugifyPlaceholder;
+        $pattern = '#[^a-z0-9'.preg_quote($characters.$placeholder, '#').']+#';
+
+        $string = mb_strtolower($string, 'utf-8');
+        $string = strtr($string, static::$slugifyTransliteration);
+        $string = preg_replace($pattern, $placeholder, $string);
+        $string = preg_replace('#'.$placeholder.'{2,}#', $placeholder, $string);
+
+        return trim($string, $placeholder);
+    }
+
+    /**
+     * @deprecated Use Str::slugify() instead
+     *
      * @param string $string
      * @param string $characters
      * @param string $placeholder
@@ -197,13 +223,7 @@ class Str
      */
     public static function getSlug(string $string, string $characters = '', string $placeholder = '-'): string
     {
-        $pattern = '#[^a-z0-9'.preg_quote($characters, '#').$placeholder.']+#';
-        $string = mb_strtolower($string, 'utf-8');
-        $string = strtr($string, static::$slugTransliteration);
-        $string = preg_replace($pattern, $placeholder, $string);
-        $string = preg_replace('#'.$placeholder.'{2,}#', $placeholder, $string);
-
-        return trim($string, $placeholder);
+        return static::slugify($string, $characters, $placeholder);
     }
 
     /**
