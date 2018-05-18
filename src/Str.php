@@ -83,6 +83,23 @@ class Str
     /** @var string */
     protected static $interpolatePattern = '{%s}';
 
+    /** @var array  */
+    protected static $romanNumerals = [
+        '1000' => 'M',
+        '900' => 'CM',
+        '500' => 'D',
+        '400' => 'CD',
+        '100' => 'C',
+        '90' => 'XC',
+        '50' => 'L',
+        '40' => 'XL',
+        '10' => 'X',
+        '9' => 'IX',
+        '5' => 'V',
+        '4' => 'IV',
+        '1' => 'I',
+    ];
+
     /**
      * @param string $char
      *
@@ -429,5 +446,26 @@ class Str
         $key = preg_replace('#[^A-Za-z0-9_\.]#', '_', $key);
 
         return strtolower($key);
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return string
+     */
+    public static function intToRoman(int $number): string
+    {
+        if ($number > 4999) {
+            return (string) $number;
+        }
+
+        $romanNumber = '';
+        foreach (static::$romanNumerals as $intNumeral => $romanNumeral) {
+            $d = floor($number / $intNumeral);
+            $romanNumber .= str_repeat($romanNumeral, $d);
+            $number -= $d * $intNumeral;
+        }
+
+        return $romanNumber;
     }
 }
