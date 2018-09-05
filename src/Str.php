@@ -75,7 +75,7 @@ class Str
     ];
 
     /** @var string */
-    protected static $slugifyPlaceholder = '-';
+    protected static $slugifyPlaceholder = '_';
 
     /** @var string */
     protected static $emailPattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
@@ -230,20 +230,6 @@ class Str
     }
 
     /**
-     * @deprecated Use Str::slugify() instead
-     *
-     * @param string $string
-     * @param string $characters
-     * @param string $placeholder
-     *
-     * @return string
-     */
-    public static function getSlug(string $string, string $characters = '', string $placeholder = '-'): string
-    {
-        return static::slugify($string, $characters, $placeholder);
-    }
-
-    /**
      * @param int    $length
      * @param string $characters
      *
@@ -259,6 +245,24 @@ class Str
         }
 
         return $string;
+    }
+
+    /**
+     * Generate an URI safe base64 encoded token that does not contain "+",
+     * "/" or "=" which need to be URL encoded and make URLs unnecessarily
+     * longer.
+     *
+     * @see https://github.com/symfony/security-csrf/blob/4.1/TokenGenerator/UriSafeTokenGenerator.php
+     *
+     * @param int $length The length of the random string that should be returned in bytes.
+     *
+     * @return string The generated token
+     */
+    public static function generateToken(int $length = 32): string
+    {
+        $bytes = random_bytes($length);
+
+        return rtrim(strtr(base64_encode($bytes), '+/', '-_'), '=');
     }
 
     /**

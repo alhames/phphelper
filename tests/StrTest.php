@@ -135,14 +135,14 @@ class StrTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['абв', 'abv'],
-            ['длинное название чего-либо', 'dlinnoe-nazvanie-chego-libo'],
-            ['fileName.txt', 'filename-txt'],
+            ['длинное название чего-либо', 'dlinnoe_nazvanie_chego_libo'],
+            ['fileName.txt', 'filename_txt'],
             ['fileName.txt', 'filename.txt', '.'],
-            ['Заглавная буква в Начале слова и Предложения', 'zaglavnaya-bukva-v-nachale-slova-i-predlozheniya'],
-            ['counter-strike', 'counter-strike'],
-            ['snake_case', 'snake-case'],
-            ['snake_case', 'snake_case', '_'],
-            ['@#df$%щф&^жуpor', 'df-schf-zhupor'],
+            ['Заглавная буква в Начале слова и Предложения', 'zaglavnaya_bukva_v_nachale_slova_i_predlozheniya'],
+            ['counter-strike', 'counter_strike'],
+            ['counter-strike', 'counter-strike', '-'],
+            ['snake_case', 'snake_case'],
+            ['@#df$%щф&^жуpor', 'df_schf_zhupor'],
         ];
     }
 
