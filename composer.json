@@ -18,6 +18,11 @@
     "phpunit/phpunit": "^6.2",
     "symfony/yaml": "^3.0"
   },
+  "suggest": {
+    "ext-gd": "GD is required for PhpHelper\\Image\\EditableImage",
+    "ext-json": "json is required for PhpHelper\\Json",
+    "guzzle/guzzle": "Guzzle is required for PhpHelper\\Image\\Image"
+  },
   "support": {
     "issues": "https://github.com/alhames/phphelper/issues"
   },
