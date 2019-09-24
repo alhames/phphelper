@@ -37,7 +37,7 @@ class SiteIndex extends AbstractSiteMap
             if ($lastModification instanceof \DateTime) {
                 $lastModification = $lastModification->format('c');
             } else {
-                if (is_string($lastModification)) {
+                if (\is_string($lastModification)) {
                     $lastModification = strtotime($lastModification);
                 }
                 $lastModification = date('c', $lastModification);

@@ -83,7 +83,7 @@ class Str
     /** @var string */
     protected static $interpolatePattern = '{%s}';
 
-    /** @var array  */
+    /** @var array */
     protected static $romanNumerals = [
         '1000' => 'M',
         '900' => 'CM',
@@ -298,7 +298,7 @@ class Str
      */
     public static function isHash($hash, int $length = 32): bool
     {
-        return (is_string($hash) || is_int($hash)) && preg_match('#^[0-9a-f]{'.$length.'}$#i', $hash);
+        return (\is_string($hash) || \is_int($hash)) && preg_match('#^[0-9a-f]{'.$length.'}$#i', $hash);
     }
 
     /**
@@ -351,7 +351,7 @@ class Str
      */
     public static function pad(string $input, int $length, string $string = ' ', int $type = STR_PAD_RIGHT): string
     {
-        $diff = strlen($input) - mb_strlen($input, 'utf-8');
+        $diff = \strlen($input) - mb_strlen($input, 'utf-8');
 
         return str_pad($input, $length + $diff, $string, $type);
     }
@@ -412,8 +412,8 @@ class Str
      */
     public static function getShortClassName($class): string
     {
-        if (is_object($class)) {
-            $class = get_class($class);
+        if (\is_object($class)) {
+            $class = \get_class($class);
         }
 
         return substr(strrchr($class, '\\'), 1);

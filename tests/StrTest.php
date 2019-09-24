@@ -48,7 +48,7 @@ class StrTest extends \PHPUnit\Framework\TestCase
         $chars = [];
 
         for ($i = 0; $i < 128; ++$i) {
-            $chars[] = [$i, chr($i)];
+            $chars[] = [$i, \chr($i)];
         }
 
         return array_merge($chars, [
@@ -149,12 +149,12 @@ class StrTest extends \PHPUnit\Framework\TestCase
     public function testGetRandomString()
     {
         $randomStrings = [];
-        for ($i = 0; $i < 10000; $i++) {
+        for ($i = 0; $i < 10000; ++$i) {
             $randomStrings[] = Str::getRandomString();
         }
 
         $this->assertCount(10000, array_unique($randomStrings));
-        $this->assertSame(111, strlen(Str::getRandomString(111)));
+        $this->assertSame(111, \strlen(Str::getRandomString(111)));
     }
 
     /**
@@ -378,7 +378,7 @@ class StrTest extends \PHPUnit\Framework\TestCase
         ];
 
         $data = [];
-        $total = count($conventions);
+        $total = \count($conventions);
 
         for ($i = 1; $i < $total; ++$i) {
             foreach ($strings as $string) {

@@ -12,13 +12,15 @@
     }
   ],
   "require": {
-    "php": "^7.0"
+    "php": "^7.1"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.2",
-    "symfony/yaml": "^3.0"
+    "guzzlehttp/guzzle": "^6.0",
+    "phpunit/phpunit": "^7.5",
+    "symfony/yaml": "^4.0"
   },
   "suggest": {
+    "ext-fileinfo": "FileInfo is required for PhpHelper\\Image\\Image",
     "ext-gd": "GD is required for PhpHelper\\Image\\EditableImage",
     "ext-json": "json is required for PhpHelper\\Json",
     "guzzle/guzzle": "Guzzle is required for PhpHelper\\Image\\Image"

@@ -48,7 +48,7 @@ class SiteMap extends AbstractSiteMap
             if ($lastModification instanceof \DateTime) {
                 $lastModification = $lastModification->format('c');
             } else {
-                if (is_string($lastModification)) {
+                if (\is_string($lastModification)) {
                     $lastModification = strtotime($lastModification);
                 }
                 $lastModification = date('c', $lastModification);
@@ -59,7 +59,7 @@ class SiteMap extends AbstractSiteMap
             $urlElement->appendChild($lastmodElement);
         }
 
-        if (null !== $changeFrequency && in_array($changeFrequency, static::$frequency, true)) {
+        if (null !== $changeFrequency && \in_array($changeFrequency, static::$frequency, true)) {
             $changefreqElement = $this->createElement('changefreq');
             $changefreqElement->appendChild($this->createTextNode($changeFrequency));
             $urlElement->appendChild($changefreqElement);

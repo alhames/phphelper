@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the PHP Helper package.
+ *
+ * (c) Pavel Logachev <alhames@mail.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace PhpHelper;
 
 /**
@@ -21,6 +30,14 @@ class Hash
     }
 
     /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->value;
+    }
+
+    /**
      * @param string $data
      *
      * @return static
@@ -29,7 +46,7 @@ class Hash
     {
         $binary = '';
         foreach (str_split($data, 8) as $byte) {
-            $binary .= chr(intval($byte, 2));
+            $binary .= \chr(\intval($byte, 2));
         }
 
         return new static($binary);
@@ -80,7 +97,7 @@ class Hash
     {
         $bits = '';
         foreach (str_split($this->value) as $byte) {
-            $bits .= sprintf('%08b', ord($byte));
+            $bits .= sprintf('%08b', \ord($byte));
         }
 
         return $bits;
@@ -100,5 +117,13 @@ class Hash
     public function getUriSafeBase64(): string
     {
         return strtr($this->getBase64(), ['+' => '-', '/' => '_', '=' => '']);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBinary(): string
+    {
+        return $this->value;
     }
 }
