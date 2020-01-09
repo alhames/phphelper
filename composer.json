@@ -12,12 +12,13 @@
     }
   ],
   "require": {
-    "php": "^7.1"
+    "php": "^7.1",
+    "ext-mbstring": "*"
   },
   "require-dev": {
     "guzzlehttp/guzzle": "^6.0",
     "phpunit/phpunit": "^7.5",
-    "symfony/yaml": "^4.0"
+    "symfony/yaml": "^4.4 || ^5.0"
   },
   "suggest": {
     "ext-fileinfo": "FileInfo is required for PhpHelper\\Image\\Image",
