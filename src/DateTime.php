@@ -14,7 +14,7 @@ namespace PhpHelper;
 /**
  * Class DateTime.
  */
-class DateTime extends \DateTime implements \JsonSerializable
+class DateTime extends \DateTimeImmutable implements \JsonSerializable
 {
     const MINUTE = 60;
     const HOUR = 60 * self::MINUTE;
@@ -40,77 +40,75 @@ class DateTime extends \DateTime implements \JsonSerializable
      */
     public static function createFromTimestamp(int $timestamp): self
     {
-        $date = new static();
-
-        return $date->setTimestamp($timestamp);
+        return (new static())->setTimestamp($timestamp);
     }
 
     /**
-     * @param \DateTimeInterface|string $day
+     * @param \DateTimeInterface|string $date
      *
      * @return static
      */
-    public static function createStartOfHour($day = 'now'): self
+    public static function createStartOfHour($date = 'now'): self
     {
-        if (!$day instanceof \DateTimeInterface) {
-            $day = new static($day);
-            $day->setTime($day->format('H'), 0, 0, 0);
+        if (!$date instanceof \DateTimeInterface) {
+            $date = new static($date);
+            $date = $date->setTime($date->format('H'), 0, 0, 0);
         } else {
-            $day = new static($day->format('Y-m-d H:00:00.0'), $day->getTimezone());
+            $date = new static($date->format('Y-m-d H:00:00.0'), $date->getTimezone());
         }
 
-        return $day;
+        return $date;
     }
 
     /**
-     * @param \DateTimeInterface|string $day
+     * @param \DateTimeInterface|string $date
      *
      * @return static
      */
-    public static function createEndOfHour($day = 'now'): self
+    public static function createEndOfHour($date = 'now'): self
     {
-        if (!$day instanceof \DateTimeInterface) {
-            $day = new static($day);
-            $day->setTime($day->format('H'), 59, 59, 999999);
+        if (!$date instanceof \DateTimeInterface) {
+            $date = new static($date);
+            $date = $date->setTime($date->format('H'), 59, 59, 999999);
         } else {
-            $day = new static($day->format('Y-m-d H:59:59.999999'), $day->getTimezone());
+            $date = new static($date->format('Y-m-d H:59:59.999999'), $date->getTimezone());
         }
 
-        return $day;
+        return $date;
     }
 
     /**
-     * @param \DateTimeInterface|string $day
+     * @param \DateTimeInterface|string $date
      *
      * @return static
      */
-    public static function createStartOfDay($day = 'now'): self
+    public static function createStartOfDay($date = 'now'): self
     {
-        if (!$day instanceof \DateTimeInterface) {
-            $day = new static($day);
-            $day->setTime(0, 0, 0, 0);
+        if (!$date instanceof \DateTimeInterface) {
+            $date = new static($date);
+            $date = $date->setTime(0, 0, 0, 0);
         } else {
-            $day = new static($day->format('Y-m-d 00:00:00.0'), $day->getTimezone());
+            $date = new static($date->format('Y-m-d 00:00:00.0'), $date->getTimezone());
         }
 
-        return $day;
+        return $date;
     }
 
     /**
-     * @param \DateTimeInterface|string $day
+     * @param \DateTimeInterface|string $date
      *
      * @return static
      */
-    public static function createEndOfDay($day = 'now'): self
+    public static function createEndOfDay($date = 'now'): self
     {
-        if (!$day instanceof \DateTimeInterface) {
-            $day = new static($day);
-            $day->setTime(23, 59, 59, 999999);
+        if (!$date instanceof \DateTimeInterface) {
+            $date = new static($date);
+            $date = $date->setTime(23, 59, 59, 999999);
         } else {
-            $day = new static($day->format('Y-m-d 23:59:59.999999'), $day->getTimezone());
+            $date = new static($date->format('Y-m-d 23:59:59.999999'), $date->getTimezone());
         }
 
-        return $day;
+        return $date;
     }
 
     /**
@@ -121,10 +119,10 @@ class DateTime extends \DateTime implements \JsonSerializable
     public function diff($datetime2 = 'now', $absolute = false)
     {
         if (!$datetime2 instanceof \DateTimeInterface) {
-            $datetime2 = new static($datetime2);
+            $datetime2 = new static($datetime2, $this->getTimezone());
         }
 
-        return parent::diff($datetime2);
+        return parent::diff($datetime2, $absolute);
     }
 
     /**
@@ -133,5 +131,37 @@ class DateTime extends \DateTime implements \JsonSerializable
     public function jsonSerialize()
     {
         return $this->format(self::W3C);
+    }
+
+    /**
+     * @return static
+     */
+    public function getStartOfHour(): self
+    {
+        return $this->setTime($this->format('H'), 0, 0, 0);
+    }
+
+    /**
+     * @return static
+     */
+    public function getEndOfHour(): self
+    {
+        return $this->setTime($this->format('H'), 59, 59, 999999);
+    }
+
+    /**
+     * @return static
+     */
+    public function getStartOfDay(): self
+    {
+        return $this->setTime(0, 0, 0, 0);
+    }
+
+    /**
+     * @return static
+     */
+    public function getEndOfDay(): self
+    {
+        return $this->setTime(23, 59, 59, 999999);
     }
 }

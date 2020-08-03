@@ -13,6 +13,7 @@
   ],
   "require": {
     "php": "^7.1",
+    "ext-json": "*",
     "ext-mbstring": "*"
   },
   "require-dev": {
@@ -23,7 +24,6 @@
   "suggest": {
     "ext-fileinfo": "FileInfo is required for PhpHelper\\Image\\Image",
     "ext-gd": "GD is required for PhpHelper\\Image\\EditableImage",
-    "ext-json": "json is required for PhpHelper\\Json",
     "guzzle/guzzle": "Guzzle is required for PhpHelper\\Image\\Image"
   },
   "support": {
@@ -32,7 +32,8 @@
   "autoload": {
     "psr-4": {
       "PhpHelper\\": "src/"
-    }
+    },
+    "files": ["functions.php"]
   },
   "autoload-dev": {
     "psr-4": {
