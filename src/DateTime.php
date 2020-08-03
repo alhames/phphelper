@@ -23,6 +23,9 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
     const MONTH = 30 * self::DAY;
     const YEAR = 365 * self::DAY;
 
+    const FORMAT_MYSQL = 'Y-m-d H:i:s';
+    const FORMAT_W3C = 'Y-m-d\TH:i:sP';
+
     /**
      * Return Date in ISO8601 format.
      *
@@ -30,7 +33,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
      */
     public function __toString()
     {
-        return $this->format(self::W3C);
+        return $this->format(self::FORMAT_W3C);
     }
 
     /**
@@ -130,7 +133,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
      */
     public function jsonSerialize()
     {
-        return $this->format(self::W3C);
+        return $this->format(self::FORMAT_W3C);
     }
 
     /**

@@ -90,7 +90,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
     {
         $date = new DateTime(self::DATE_EXAMPLE, new \DateTimeZone('UTC'));
         $diff = $date->diff('2020-01-03 15:20:40');
-        $this->assertSame('0-0-2 5-10-30', $diff->format('y-m-d h-i-s'));
+        $this->assertSame('0-0-2 5-10-30', $diff->format('%y-%m-%d %h-%i-%s'));
     }
 
     public function testJsonSerialize(): void
@@ -139,13 +139,13 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
     public function functionDataProvider(): array
     {
         return [
-            ['2020-01-01 10:20:30.40', '2020-01-01 10:20:30.40'],
-            ['2020-01-01 10:20:30.40', new DateTime('2020-01-01 10:20:30.40')],
-            ['2020-01-01 10:20:30.40', new \DateTime('2020-01-01 10:20:30.40')],
-            ['2020-01-01 10:20:30.40', new \DateTimeImmutable('2020-01-01 10:20:30.40')],
-            ['2020-01-01 10:20:30.0', mktime(10, 20, 30, 01, 01, 2020)],
-            ['2020-01-01 10:20:30.0', (string) mktime(10, 20, 30, 01, 01, 2020)],
-            ['2020-01-02 10:20:30.40', '2020-01-01 10:20:30.40 + 1 day'],
+            ['2020-01-01 10:20:30.400000', '2020-01-01 10:20:30.40'],
+            ['2020-01-01 10:20:30.400000', new DateTime('2020-01-01 10:20:30.40')],
+            ['2020-01-01 10:20:30.400000', new \DateTime('2020-01-01 10:20:30.40')],
+            ['2020-01-01 10:20:30.400000', new \DateTimeImmutable('2020-01-01 10:20:30.40')],
+            ['2020-01-01 10:20:30.000000', mktime(10, 20, 30, 01, 01, 2020)],
+            ['2020-01-01 10:20:30.000000', (string) mktime(10, 20, 30, 01, 01, 2020)],
+            ['2020-01-02 10:20:30.400000', '2020-01-01 10:20:30.40 + 1 day'],
         ];
     }
 }
